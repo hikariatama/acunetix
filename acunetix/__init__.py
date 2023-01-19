@@ -86,6 +86,10 @@ json.JSONEncoder.default = _default
 
 
 class AcunetixAPI(Scans, Targets, Reports):
+    """
+    Acunetix API client.
+    You must deploy your own Acunetix instance to use this client.
+    """
     def __init__(self, api_key: str, endpoint: str = "localhost:3443"):
         """
         :param api_key: API key from Acunetix
@@ -139,9 +143,7 @@ class AcunetixAPI(Scans, Targets, Reports):
             await callback
 
     async def _poll_notifications(self):
-        """
-        Polls the Acunetix API for notifications
-        """
+        """Polls the Acunetix API for notifications"""
         while True:
             try:
                 notifications = await self._request("GET", "notifications")
