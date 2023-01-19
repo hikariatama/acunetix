@@ -74,6 +74,10 @@ logger = logging.getLogger(__name__)
 
 
 def _default(self, obj):  # skipcq: PYL-W0613
+    """
+    Patch default JSON serializer to support custom classes
+    It will call `to_json` method on the object if it exists
+    """
     return getattr(obj.__class__, "to_json", _default.default)(obj)
 
 
@@ -122,6 +126,11 @@ class AcunetixAPI(Scans, Targets, Reports):
         asyncio.create_task(self._poll_notifications())
 
     async def _execute_callback(self, callback_id: str, notification: Notification):
+        """
+        Executes a callback if it exists
+        :param callback_id: Callback ID
+        :param notification: Notification
+        """
         if callback_id not in self._callbacks:
             return
 
@@ -130,6 +139,9 @@ class AcunetixAPI(Scans, Targets, Reports):
             await callback
 
     async def _poll_notifications(self):
+        """
+        Polls the Acunetix API for notifications
+        """
         while True:
             try:
                 notifications = await self._request("GET", "notifications")
