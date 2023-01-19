@@ -90,6 +90,7 @@ class AcunetixAPI(Scans, Targets, Reports):
     Acunetix API client.
     You must deploy your own Acunetix instance to use this client.
     """
+
     def __init__(self, api_key: str, endpoint: str = "localhost:3443"):
         """
         :param api_key: API key from Acunetix
