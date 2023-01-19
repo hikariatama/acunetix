@@ -27,7 +27,9 @@ class Targets:
         :return: `Target` object
         :example:
         ```python
-            >>> target = await api.targets.get_target("316f58ff-f6d6-47d5-b5e3-806837a8cfe2")
+            >>> target = await api.targets.get_target(
+                    "316f58ff-f6d6-47d5-b5e3-806837a8cfe2",
+                )
             >>> print(target)
         ```
         """

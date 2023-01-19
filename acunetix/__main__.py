@@ -5,8 +5,6 @@ import string
 
 import aiohttp
 
-# flake8: noqa F401
-# pylint: disable=unused-import
 from . import errors, methods, schema, status_codes
 from .errors import (
     ERROR_MAP,
@@ -39,11 +37,42 @@ from .status_codes import (
     SCAN_DONE_STATUS,
 )
 
+__all__ = [
+    "AcunetixAPI",
+    "AcunetixAPIError",
+    "Acunetix400Error",
+    "Acunetix401Error",
+    "Acunetix403Error",
+    "Acunetix404Error",
+    "Acunetix409Error",
+    "Acunetix422Error",
+    "Acunetix429Error",
+    "Acunetix500Error",
+    "Acunetix502Error",
+    "Acunetix503Error",
+    "Acunetix504Error",
+    "ERROR_MAP",
+    "EXPORT_DONE_STATUS",
+    "FileAttachment",
+    "InputTarget",
+    "Notification",
+    "NotificationData",
+    "REPORT_DONE_STATUS",
+    "Report",
+    "SCAN_DONE_STATUS",
+    "Scan",
+    "Target",
+    "status_codes",
+    "methods",
+    "schema",
+    "errors",
+]
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def _default(self, obj):
+def _default(self, obj):  # skipcq: PYL-W0613
     return getattr(obj.__class__, "to_json", _default.default)(obj)
 
 

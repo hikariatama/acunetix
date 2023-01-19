@@ -27,7 +27,9 @@ class Scans:
         :return: `Scan` object
         :example:
         ```python
-            >>> scan = await api.scans.get_scan("316f58ff-f6d6-47d5-b5e3-806837a8cfe2")
+            >>> scan = await api.scans.get_scan(
+                    "316f58ff-f6d6-47d5-b5e3-806837a8cfe2",
+                )
             >>> print(scan)
         ```
         """
@@ -49,7 +51,8 @@ class Scans:
         :param profile_id: Profile ID
         :param report_template_id: Report template ID
         :param schedule: Scheduling options
-        :param done_callback: Callback function that will be called when scan is finished (not report ready!)
+        :param done_callback: Callback function that will be called
+                              when scan is finished (not report ready!)
         :return: `Scan` object
         :example:
         ```python

@@ -27,7 +27,9 @@ class Reports:
         :return: `Report` object
         :example:
         ```python
-            >>> report = await api.reports.get_report("316f58ff-f6d6-47d5-b5e3-806837a8cfe2")
+            >>> report = await api.reports.get_report(
+                    "316f58ff-f6d6-47d5-b5e3-806837a8cfe2",
+                )
             >>> print(report)
         ```
         """
