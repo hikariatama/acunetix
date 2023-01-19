@@ -87,7 +87,9 @@ class AcunetixAPI(Scans, Targets, Reports):
         :param endpoint: Acunetix API endpoint. Default is localhost:3443
         :example:
         ```python
-            >>> api = AcunetixAPI("1986ad8c0a5b3df4d7028d5f3c06e946cdcc13b0d336841bc93daf7e58fb8a63a")
+            >>> api = AcunetixAPI(
+                    "1986ad8c0a5b3df4d7028d5f3c06e946cdcc13b0d336841bc93daf7e58fb8a63a",
+                )
         ```
         """
         if not api_key or any(char not in string.hexdigits for char in api_key):
@@ -104,8 +106,8 @@ class AcunetixAPI(Scans, Targets, Reports):
     async def connect(self):
         """
         Connect to Acunetix API. Required before using any other methods.
-        Without calling it, the credentials will be checked only when the first request is made.
-        Also, callbacks will not be executed.
+        Without calling it, the credentials will be checked only when the
+        first request is made. Also, callbacks will not be executed.
         :example:
         ```python
             >>> await api.connect()
