@@ -46,6 +46,7 @@ from .schema import (
     QUICK,
     SARBANES_OXLEY,
     SCAN_COMPARISON,
+    SCAN_PROFILE_MAP,
     SQL_INJECTION_VULNERABILITIES,
     STIG_DISA,
     TEMPLATE_MAP,
@@ -118,6 +119,7 @@ __all__ = [
     "NIST_SP800_53",
     "OWASP_TOP_10_2013",
     "OWASP_TOP_10_2017",
+    "OWASP_TOP_10_2021",
     "PCI_DSS_3_2",
     "SARBANES_OXLEY",
     "STIG_DISA",
@@ -138,6 +140,7 @@ __all__ = [
     "CRAWL_ONLY",
     "MALWARE_SCAN",
     "InputScanProfile",
+    "SCAN_PROFILE_MAP",
 ]
 
 logger = logging.getLogger(__name__)

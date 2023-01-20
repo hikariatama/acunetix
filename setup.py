@@ -1,8 +1,8 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 setup(
     name="acunetix",
-    version="0.0.3",
+    version="0.0.4",
     packages=find_packages(),
     long_description="Acunetix Web Vulnerability Scanner API wrapper",
     keywords="acunetix vulnerability scanner pentest security infosec",
