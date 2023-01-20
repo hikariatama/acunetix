@@ -37,7 +37,7 @@ class Report:
         data["source"] = TypedList.from_dict(data["source"])
         data.setdefault(
             "template",
-            TEMPLATE_MAP.get(data.get("template_id", None), None),
+            TEMPLATE_MAP.get(data.get("template_id"), None),
         )
 
         return cls(**data)

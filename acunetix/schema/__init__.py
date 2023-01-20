@@ -23,6 +23,7 @@ from .notification_data import NotificationData
 from .report import Report
 from .report_template import (
     AFFECTED_ITEMS,
+    COMPREHENSIVE,
     CWE_SANS_TOP_25,
     DEVELOPER,
     EXECUTIVE_SUMMARY,
@@ -39,13 +40,12 @@ from .report_template import (
     STIG_DISA,
     TEMPLATE_MAP,
     WASC_THREAT_CLASSIFICATION,
-    COMPREHENSIVE,
     ReportTemplate,
 )
 from .scan import Scan
 from .scan_profile import (
     CRAWL_ONLY,
-    CROSS_SITE_SCRIPTING_VULNERABILITIES,
+    XSS_VULNERABILITIES,
     FULL_SCAN,
     HIGH_OR_MEDIUM_RISK_VULNERABILITIES,
     HIGH_RISK_VULNERABILITIES,
@@ -95,7 +95,7 @@ __all__ = [
     "FULL_SCAN",
     "HIGH_RISK_VULNERABILITIES",
     "HIGH_OR_MEDIUM_RISK_VULNERABILITIES",
-    "CROSS_SITE_SCRIPTING_VULNERABILITIES",
+    "XSS_VULNERABILITIES",
     "SQL_INJECTION_VULNERABILITIES",
     "WEAK_PASSWORDS",
     "CRAWL_ONLY",

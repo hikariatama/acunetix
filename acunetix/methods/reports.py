@@ -25,6 +25,8 @@ from ..utils import (
 
 
 class Reports:
+    """Reports methods"""
+
     async def get_reports(self) -> typing.List[Report]:
         """
         Get all reports
@@ -82,9 +84,9 @@ class Reports:
 
         if isinstance(report, (Target, str)):
             reports: typing.List[Report] = await self.get_reports()
-            for report in reports:
-                if get_input_target_id(report) in report.source.id_list:
-                    return report
+            for _report in reports:
+                if get_input_target_id(report) in _report.source.id_list:
+                    return _report
 
         raise Acunetix404Error(404, "Report not found")
 
@@ -186,10 +188,13 @@ class Reports:
         """
         await self.delete_reports([report])
 
-    async def download_report(self, report: InputReport) -> typing.List[io.BytesIO]:
+    async def download_report(
+        self, report: InputReport, download: str = "both"
+    ) -> typing.List[io.BytesIO]:
         """
         Download report
         :param report: Report ID or `Report` object
+        :param download: Download type. Can be `both`, `html` or `pdf`
         :return: Report content
         :example:
         ```python
@@ -203,9 +208,12 @@ class Reports:
         files: typing.List[io.BytesIO] = []
 
         for uri in report.download:
+            if download != "both" and not uri.endswith(f".{download}"):
+                continue
+
             report_url = f"https://{self._endpoint}{uri}"
             with tempfile.TemporaryDirectory() as tmpdir:
-                file = os.path.join(tmpdir, "report.pdf")
+                file = os.path.join(tmpdir, "report")
                 async with aopen(file, "wb") as f:
                     async with aiohttp.ClientSession() as session:
                         async with session.get(report_url) as resp:
@@ -216,8 +224,9 @@ class Reports:
                     file: io.BytesIO = io.BytesIO(await f.read())
 
                 file.name = await run_sync(
-                    lambda: (
-                        request.urlopen(request.Request(report_url))
+                    lambda _report_url=report_url: (
+                        # skipcq: BAN-B310
+                        request.urlopen(request.Request(_report_url))
                         .info()
                         .get_filename()
                     )

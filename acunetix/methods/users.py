@@ -6,6 +6,8 @@ from ..utils import get_input_user_id
 
 
 class Users:
+    """Users methods"""
+
     async def get_users(self) -> typing.List[User]:
         """
         Get all users

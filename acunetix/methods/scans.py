@@ -1,4 +1,3 @@
-import logging
 import typing
 
 from ..schema import Scan, SchedulingOptions
@@ -18,6 +17,8 @@ from ..utils import (
 
 
 class Scans:
+    """Scans methods"""
+
     async def get_scans(self) -> typing.List[Scan]:
         """
         Get all scans

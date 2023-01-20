@@ -29,7 +29,7 @@ from .schema import (
     AFFECTED_ITEMS,
     COMPREHENSIVE,
     CRAWL_ONLY,
-    CROSS_SITE_SCRIPTING_VULNERABILITIES,
+    XSS_VULNERABILITIES,
     CWE_SANS_TOP_25,
     DEVELOPER,
     EXECUTIVE_SUMMARY,
@@ -135,7 +135,7 @@ __all__ = [
     "FULL_SCAN",
     "HIGH_RISK_VULNERABILITIES",
     "HIGH_OR_MEDIUM_RISK_VULNERABILITIES",
-    "CROSS_SITE_SCRIPTING_VULNERABILITIES",
+    "XSS_VULNERABILITIES",
     "SQL_INJECTION_VULNERABILITIES",
     "WEAK_PASSWORDS",
     "CRAWL_ONLY",
@@ -306,12 +306,14 @@ class AcunetixAPI(Scans, Targets, Reports):
         target: InputTarget,
         scan_profile: InputScanProfile = FULL_SCAN,
         report_template: InputReportTemplate = DEVELOPER,
+        download: str = "both",
     ) -> typing.List[io.BytesIO]:
         """
         Performs a default scan on a target
         :param target: Target
         :param scan_profile: Scan profile
         :param report_template: Report template
+        :param download: Download type. Can be "both", "pdf" or "html"
         :return: List of reports as PDF files objects
         :example:
         ```python
@@ -357,7 +359,7 @@ class AcunetixAPI(Scans, Targets, Reports):
         await done_event.wait()
 
         logger.debug("Retrieving report %s", report.report_id)
-        files: typing.List[io.BytesIO] = await self.download_report(report)
+        files: typing.List[io.BytesIO] = await self.download_report(report, download)
 
         logger.debug("Report ready %s", report.report_id)
         return files

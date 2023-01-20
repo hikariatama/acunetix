@@ -5,6 +5,8 @@ from ..utils import get_input_target_id
 
 
 class Targets:
+    """Targets methods"""
+
     async def get_targets(self) -> typing.List[Target]:
         """
         Get all targets
