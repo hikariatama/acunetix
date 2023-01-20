@@ -24,6 +24,7 @@ class NotificationData:
     file_attachments: typing.Optional[typing.List[typing.Dict[str, str]]] = None
     data: typing.Optional[typing.Dict[str, typing.Any]] = None
     kind: typing.Optional[str] = None
+    address: typing.Optional[str] = None
 
     @classmethod
     def from_dict(cls, data: dict):
