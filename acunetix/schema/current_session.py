@@ -1,5 +1,6 @@
 import dataclasses
 import datetime
+import typing
 
 
 @dataclasses.dataclass
@@ -8,16 +9,21 @@ class CurrentSession:
     progress: int
     scan_session_id: str
     severity_counts: dict
-    start_date: datetime.datetime
     status: str
     threat: int
+    start_date: typing.Optional[datetime.datetime] = None
 
     @classmethod
     def from_dict(cls, data: dict):
-        data["start_date"] = datetime.datetime.fromisoformat(data["start_date"])
+        if data.get("start_date"):
+            data["start_date"] = datetime.datetime.fromisoformat(data["start_date"])
+
         return cls(**data)
 
     def to_json(self):
         data = dataclasses.asdict(self)
-        data["start_date"] = data["start_date"].isoformat()
+
+        if data["start_date"]:
+            data["start_date"] = data["start_date"].isoformat()
+
         return data

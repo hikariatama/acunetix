@@ -11,17 +11,7 @@ async def main():
 
     await api.connect()
 
-    files = await api.default_scan(
-        acunetix.schema.input_target.InputTarget("https://hikariatama.ru/hikka"),
-        acunetix.schema.scan_profile.CRAWL_ONLY,
-    )
-
-    for file in files:
-        with open(os.path.join("reports", file.name), "wb") as f:
-            f.write(file.read())
-
-    print("Successfully downloaded reports:")
-    print(os.listdir("reports"))
+    print(await api.default_scan(acunetix.InputTarget("https://ugrac1f.ru")))
 
 
 if __name__ == "__main__":
