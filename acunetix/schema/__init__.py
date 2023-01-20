@@ -39,11 +39,11 @@ from .report_template import (
     STIG_DISA,
     TEMPLATE_MAP,
     WASC_THREAT_CLASSIFICATION,
+    COMPREHENSIVE,
     ReportTemplate,
 )
 from .scan import Scan
 from .scan_profile import (
-    COMPREHENSIVE,
     CRAWL_ONLY,
     CROSS_SITE_SCRIPTING_VULNERABILITIES,
     FULL_SCAN,
