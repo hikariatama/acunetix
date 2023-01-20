@@ -26,6 +26,7 @@ class NotificationData:
     kind: typing.Optional[str] = None
     address: typing.Optional[str] = None
     scan_id: typing.Optional[str] = None
+    scanning_app: typing.Optional[str] = None
 
     @classmethod
     def from_dict(cls, data: dict):
