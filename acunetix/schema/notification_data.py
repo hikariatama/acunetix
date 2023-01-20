@@ -23,6 +23,7 @@ class NotificationData:
     failed_job_count: typing.Optional[int] = None
     file_attachments: typing.Optional[typing.List[typing.Dict[str, str]]] = None
     data: typing.Optional[typing.Dict[str, typing.Any]] = None
+    kind: typing.Optional[str] = None
 
     @classmethod
     def from_dict(cls, data: dict):
