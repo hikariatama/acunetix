@@ -27,6 +27,7 @@ from .errors import (
 from .methods import Reports, Scans, Targets
 from .schema import (
     AFFECTED_ITEMS,
+    COMPREHENSIVE,
     CRAWL_ONLY,
     CROSS_SITE_SCRIPTING_VULNERABILITIES,
     CWE_SANS_TOP_25,
@@ -141,6 +142,7 @@ __all__ = [
     "MALWARE_SCAN",
     "InputScanProfile",
     "SCAN_PROFILE_MAP",
+    "COMPREHENSIVE",
 ]
 
 logger = logging.getLogger(__name__)

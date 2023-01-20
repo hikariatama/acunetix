@@ -43,6 +43,7 @@ from .report_template import (
 )
 from .scan import Scan
 from .scan_profile import (
+    COMPREHENSIVE,
     CRAWL_ONLY,
     CROSS_SITE_SCRIPTING_VULNERABILITIES,
     FULL_SCAN,
@@ -114,4 +115,5 @@ __all__ = [
     "target",
     "typed_list",
     "user",
+    "COMPREHENSIVE",
 ]
