@@ -140,7 +140,6 @@ __all__ = [
     "InputScanProfile",
 ]
 
-logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 

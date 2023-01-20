@@ -210,7 +210,7 @@ class Reports:
                         async with session.get(report_url) as resp:
                             async for chunk in resp.content.iter_chunked(10):
                                 await f.write(chunk)
-                
+
                 async with aopen(file, "rb") as f:
                     file: io.BytesIO = io.BytesIO(await f.read())
 
