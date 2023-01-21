@@ -73,6 +73,7 @@ from .schema import (
     Vulnerability,
     WebScanStatus,
     WebVulnerabilityScanner,
+    ScanSpeed,
 )
 from .status_codes import EXPORT_DONE_STATUS, REPORT_DONE_STATUS, SCAN_DONE_STATUS
 from .typehints import (
@@ -164,6 +165,7 @@ __all__ = [
     "Users",
     "utils",
     "typehints",
+    "ScanSpeed",
 ]
 
 logger = logging.getLogger(__name__)
@@ -306,6 +308,7 @@ class AcunetixAPI(Scans, Targets, Reports, Users):
                 f"https://{self._endpoint}/api/v1/{path}",
                 json=data,
                 headers={"X-Auth": self._api_key},
+                ssl=False,
             ) as response:
                 if response.status == 204:
                     return {}
@@ -328,6 +331,7 @@ class AcunetixAPI(Scans, Targets, Reports, Users):
         scan_profile: InputScanProfile = FULL_SCAN,
         report_template: InputReportTemplate = DEVELOPER,
         download: str = "both",
+        scan_speed: str = ScanSpeed.FAST,
     ) -> typing.List[io.BytesIO]:
         """
         Performs a default scan on a target
@@ -335,6 +339,7 @@ class AcunetixAPI(Scans, Targets, Reports, Users):
         :param scan_profile: Scan profile
         :param report_template: Report template
         :param download: Download type. Can be "both", "pdf" or "html"
+        :param scan_speed: Scan speed
         :return: List of reports as PDF files objects
         :example:
         ```python
@@ -353,6 +358,7 @@ class AcunetixAPI(Scans, Targets, Reports, Users):
         logger.debug("Creating target %s", target)
         target: Target = await self.create_target(target)
         done_event: asyncio.Event = asyncio.Event()
+        await self.set_scan_speed(target, scan_speed)
 
         logger.debug("Performing scan on %s", target.target_id)
         scan: Scan = await self.create_scan(

@@ -22,6 +22,7 @@ from . import (
     vulnerability,
     web_scan_status,
     web_vulnerability_scanner,
+    scan_speed,
 )
 from .access_map import AccessMap
 from .current_session import CurrentSession
@@ -77,6 +78,7 @@ from .user import User
 from .vulnerability import Vulnerability
 from .web_scan_status import WebScanStatus
 from .web_vulnerability_scanner import WebVulnerabilityScanner
+from .scan_speed import ScanSpeed
 
 __all__ = [
     "CurrentSession",
@@ -152,4 +154,6 @@ __all__ = [
     "Vulnerability",
     "WebScanStatus",
     "WebVulnerabilityScanner",
+    "scan_speed",
+    "ScanSpeed",
 ]

@@ -1,7 +1,8 @@
 import typing
 
-from ..schema import InputTarget, Target
+from ..schema import InputTarget, Target, ScanSpeed
 from ..utils import get_input_target_id
+from ..typehints import InputTargetType
 
 
 class Targets:
@@ -140,3 +141,27 @@ class Targets:
         ```
         """
         return (await self.create_targets([target], groups))[0]
+
+    async def set_scan_speed(self, target: InputTargetType, speed: str) -> None:
+        """
+        Set target scan speed
+        :param target: Target ID or `Target` object
+        :param speed: Scan speed
+        :return: None
+        :example:
+        ```python
+            >>> await api.targets.set_scan_speed(
+                    "316f58ff-f6d6-47d5-b5e3-806837a8cfe2",
+                    ScanSpeed.SLOW,
+                )
+            >>> await api.targets.set_scan_speed(
+                    Target(...),
+                    ScanSpeed.FAST,
+                )
+        ```
+        """
+        await self.request(
+            "PATCH",
+            f"targets/{get_input_target_id(target)}/configuration",
+            {"scan_speed": speed},
+        )
