@@ -196,7 +196,7 @@ class Scans:
             (
                 await self.request(
                     "GET",
-                    f"scans/{get_input_scan_id(scan)}/results{scan.current_session.scan_session_id}/statistics",
+                    f"scans/{get_input_scan_id(scan)}/results/{scan.current_session.scan_session_id}/statistics",
                 )
             )["scanning_app"]
         )
