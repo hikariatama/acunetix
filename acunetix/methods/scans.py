@@ -1,6 +1,6 @@
 import typing
 
-from ..schema import Scan, SchedulingOptions
+from ..schema import Scan, SchedulingOptions, WebVulnerabilityScanner
 from ..typehints import (
     CallbackFunction,
     InputReportTemplate,
@@ -32,13 +32,13 @@ class Scans:
         """
         return [
             Scan.from_dict(scan)
-            for scan in (await self._request("GET", "scans"))["scans"]
+            for scan in (await self.request("GET", "scans"))["scans"]
         ]
 
     async def get_scan(self, scan: InputScan) -> Scan:
         """
         Get scan by ID
-        :param scan_id: Scan ID
+        :param scan: Scan ID or `Scan` object
         :return: `Scan` object
         :example:
         ```python
@@ -53,7 +53,7 @@ class Scans:
         ```
         """
         return Scan.from_dict(
-            await self._request("GET", f"scans/{get_input_scan_id(scan)}")
+            await self.request("GET", f"scans/{get_input_scan_id(scan)}")
         )
 
     async def create_scan(
@@ -93,7 +93,7 @@ class Scans:
                 triggerable=False,
             )
 
-        response: dict = await self._request(
+        response: dict = await self.request(
             "POST",
             "scans",
             {
@@ -123,7 +123,7 @@ class Scans:
     async def delete_scan(self, scan: InputScan) -> None:
         """
         Delete scan by ID
-        :param scan_id: Scan ID
+        :param scan: Scan ID or `Scan` object
         :example:
         ```python
             >>> await api.scans.delete_scan(
@@ -132,12 +132,12 @@ class Scans:
             >>> await api.scans.delete_scan(Scan(...))
         ```
         """
-        await self._request("DELETE", f"scans/{get_input_scan_id(scan)}")
+        await self.request("DELETE", f"scans/{get_input_scan_id(scan)}")
 
     async def pause_scan(self, scan: InputScan) -> None:
         """
         Pause scan by ID
-        :param scan_id: Scan ID
+        :param scan: Scan ID or `Scan` object
         :example:
         ```python
             >>> await api.scans.pause_scan(
@@ -146,12 +146,12 @@ class Scans:
             >>> await api.scans.pause_scan(Scan(...))
         ```
         """
-        await self._request("POST", f"scans/{get_input_scan_id(scan)}/pause", {})
+        await self.request("POST", f"scans/{get_input_scan_id(scan)}/pause", {})
 
     async def resume_scan(self, scan: InputScan) -> None:
         """
         Resume scan by ID
-        :param scan_id: Scan ID
+        :param scan: Scan ID or `Scan` object
         :example:
         ```python
             >>> await api.scans.resume_scan(
@@ -160,12 +160,12 @@ class Scans:
             >>> await api.scans.resume_scan(Scan(...))
         ```
         """
-        await self._request("POST", f"scans/{get_input_scan_id(scan)}/resume", {})
+        await self.request("POST", f"scans/{get_input_scan_id(scan)}/resume", {})
 
     async def stop_scan(self, scan: InputScan) -> None:
         """
         Stop scan by ID
-        :param scan_id: Scan ID
+        :param scan: Scan ID or `Scan` object
         :example:
         ```python
             >>> await api.scans.stop_scan(
@@ -174,4 +174,29 @@ class Scans:
             >>> await api.scans.stop_scan(Scan(...))
         ```
         """
-        await self._request("POST", f"scans/{get_input_scan_id(scan)}/abort", {})
+        await self.request("POST", f"scans/{get_input_scan_id(scan)}/abort", {})
+
+    async def get_current_stats(self, scan: InputScan) -> WebVulnerabilityScanner:
+        """
+        Get current stats of scan
+        :param scan: Scan ID or `Scan` object
+        :return: `WebVulnerabilityScanner` object
+        :example:
+        ```python
+            >>> stats = await api.scans.get_current_stats(
+                    "316f58ff-f6d6-47d5-b5e3-806837a8cfe2",
+                )
+            >>> print(stats)
+            >>> stats = await api.scans.get_current_stats(Scan(...))
+            >>> print(stats)
+        ```
+        """
+        scan = await self.get_scan(scan)
+        return WebVulnerabilityScanner.from_dict(
+            (
+                await self.request(
+                    "GET",
+                    f"scans/{get_input_scan_id(scan)}/results{scan.current_session.scan_session_id}/statistics",
+                )
+            )["scanning_app"]
+        )

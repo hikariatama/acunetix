@@ -8,7 +8,7 @@ import typing
 
 import aiohttp
 
-from . import errors, methods, schema, status_codes
+from . import errors, methods, schema, status_codes, typehints, utils
 from .errors import (
     ERROR_MAP,
     Acunetix400Error,
@@ -24,12 +24,11 @@ from .errors import (
     Acunetix504Error,
     AcunetixAPIError,
 )
-from .methods import Reports, Scans, Targets
+from .methods import Reports, Scans, Targets, Users
 from .schema import (
     AFFECTED_ITEMS,
     COMPREHENSIVE,
     CRAWL_ONLY,
-    XSS_VULNERABILITIES,
     CWE_SANS_TOP_25,
     DEVELOPER,
     EXECUTIVE_SUMMARY,
@@ -53,17 +52,27 @@ from .schema import (
     TEMPLATE_MAP,
     WASC_THREAT_CLASSIFICATION,
     WEAK_PASSWORDS,
+    XSS_VULNERABILITIES,
     AccessMap,
     FileAttachment,
+    Host,
     InputTarget,
+    Message,
     Notification,
     NotificationData,
     Report,
     ReportTemplate,
     Scan,
+    StatusStatisticEntry,
+    StatusStatistics,
     Target,
+    TargetHostInfo,
+    TargetInfo,
     TypedList,
     User,
+    Vulnerability,
+    WebScanStatus,
+    WebVulnerabilityScanner,
 )
 from .status_codes import EXPORT_DONE_STATUS, REPORT_DONE_STATUS, SCAN_DONE_STATUS
 from .typehints import (
@@ -143,6 +152,18 @@ __all__ = [
     "InputScanProfile",
     "SCAN_PROFILE_MAP",
     "COMPREHENSIVE",
+    "Host",
+    "Message",
+    "StatusStatisticEntry",
+    "StatusStatistics",
+    "TargetHostInfo",
+    "TargetInfo",
+    "Vulnerability",
+    "WebScanStatus",
+    "WebVulnerabilityScanner",
+    "Users",
+    "utils",
+    "typehints",
 ]
 
 logger = logging.getLogger(__name__)
@@ -161,7 +182,7 @@ _default.default = json.JSONEncoder().default
 json.JSONEncoder.default = _default
 
 
-class AcunetixAPI(Scans, Targets, Reports):
+class AcunetixAPI(Scans, Targets, Reports, Users):
     """
     Acunetix API client.
     You must deploy your own Acunetix instance to use this client.
@@ -237,7 +258,7 @@ class AcunetixAPI(Scans, Targets, Reports):
         """Polls the Acunetix API for notifications"""
         while True:
             try:
-                notifications: dict = await self._request("GET", "notifications")
+                notifications: dict = await self.request("GET", "notifications")
                 for notification in notifications["notifications"]:
                     logger.debug(
                         "Processing notification %s",
@@ -253,7 +274,7 @@ class AcunetixAPI(Scans, Targets, Reports):
                             Notification.from_dict(notification),
                         )
 
-                    await self._request(
+                    await self.request(
                         "POST",
                         f"notifications/{notification['notification_id']}/consume",
                     )
@@ -263,7 +284,7 @@ class AcunetixAPI(Scans, Targets, Reports):
 
             await asyncio.sleep(5)
 
-    async def _request(
+    async def request(
         self,
         method: str,
         path: str,
@@ -299,7 +320,7 @@ class AcunetixAPI(Scans, Targets, Reports):
 
     async def _check_credentials(self):
         """Checks if the credentials are valid"""
-        await self._request("GET", "me")
+        await self.request("GET", "me")
 
     async def default_scan(
         self,

@@ -40,7 +40,7 @@ class Reports:
         """
         return [
             Report.from_dict(report)
-            for report in (await self._request("GET", "reports"))["reports"]
+            for report in (await self.request("GET", "reports"))["reports"]
         ]
 
     async def get_report(
@@ -67,7 +67,7 @@ class Reports:
         if isinstance(report, (Report, str)):
             try:
                 return Report.from_dict(
-                    await self._request("GET", f"reports/{get_input_report_id(report)}")
+                    await self.request("GET", f"reports/{get_input_report_id(report)}")
                 )
             except Acunetix404Error:
                 if not isinstance(report, str) or input_type and input_type == "report":
@@ -118,7 +118,7 @@ class Reports:
             >>> print(report)
         ```
         """
-        response: dict = await self._request(
+        response: dict = await self.request(
             "POST",
             "reports",
             {"template_id": get_input_report_template_id(template), "source": source},
@@ -145,7 +145,7 @@ class Reports:
         """
         return [
             ReportTemplate.from_dict(report_template)
-            for report_template in (await self._request("GET", "report_templates"))[
+            for report_template in (await self.request("GET", "report_templates"))[
                 "report_templates"
             ]
         ]
@@ -165,7 +165,7 @@ class Reports:
                 )
         ```
         """
-        await self._request(
+        await self.request(
             "POST",
             "reports/delete",
             {"report_id_list": [get_input_report_id(report) for report in reports]},

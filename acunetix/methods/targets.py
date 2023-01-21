@@ -20,7 +20,7 @@ class Targets:
         """
         return [
             Target.from_dict(target)
-            for target in (await self._request("GET", "targets"))["targets"]
+            for target in (await self.request("GET", "targets"))["targets"]
         ]
 
     async def get_target(self, target: typing.Union[Target, str]) -> Target:
@@ -41,7 +41,7 @@ class Targets:
         ```
         """
         return Target.from_dict(
-            await self._request("GET", f"targets/{get_input_target_id(target)}")
+            await self.request("GET", f"targets/{get_input_target_id(target)}")
         )
 
     async def create_targets(
@@ -72,7 +72,7 @@ class Targets:
             >>>     print(target)
         ```
         """
-        response: dict = await self._request(
+        response: dict = await self.request(
             "POST", "targets/add", {"targets": targets, "groups": groups or []}
         )
 
@@ -95,7 +95,7 @@ class Targets:
                 )
         ```
         """
-        await self._request(
+        await self.request(
             "POST",
             "targets/delete",
             {"targets": [get_input_target_id(target) for target in targets]},

@@ -2,7 +2,9 @@ from . import (
     access_map,
     current_session,
     file_attachment,
+    host,
     input_target,
+    message,
     notification,
     notification_data,
     report,
@@ -10,14 +12,23 @@ from . import (
     scan,
     scan_profile,
     scheduling_options,
+    status_statistic_entry,
+    status_statistics,
     target,
+    target_host_info,
+    target_info,
     typed_list,
     user,
+    vulnerability,
+    web_scan_status,
+    web_vulnerability_scanner,
 )
 from .access_map import AccessMap
 from .current_session import CurrentSession
 from .file_attachment import FileAttachment
+from .host import Host
 from .input_target import InputTarget
+from .message import Message
 from .notification import Notification
 from .notification_data import NotificationData
 from .report import Report
@@ -45,7 +56,6 @@ from .report_template import (
 from .scan import Scan
 from .scan_profile import (
     CRAWL_ONLY,
-    XSS_VULNERABILITIES,
     FULL_SCAN,
     HIGH_OR_MEDIUM_RISK_VULNERABILITIES,
     HIGH_RISK_VULNERABILITIES,
@@ -53,12 +63,20 @@ from .scan_profile import (
     SCAN_PROFILE_MAP,
     SQL_INJECTION_VULNERABILITIES,
     WEAK_PASSWORDS,
+    XSS_VULNERABILITIES,
     ScanProfile,
 )
 from .scheduling_options import SchedulingOptions
+from .status_statistic_entry import StatusStatisticEntry
+from .status_statistics import StatusStatistics
 from .target import Target
+from .target_host_info import TargetHostInfo
+from .target_info import TargetInfo
 from .typed_list import TypedList
 from .user import User
+from .vulnerability import Vulnerability
+from .web_scan_status import WebScanStatus
+from .web_vulnerability_scanner import WebVulnerabilityScanner
 
 __all__ = [
     "CurrentSession",
@@ -116,4 +134,22 @@ __all__ = [
     "typed_list",
     "user",
     "COMPREHENSIVE",
+    "host",
+    "message",
+    "status_statistics",
+    "status_statistic_entry",
+    "target_host_info",
+    "target_info",
+    "vulnerability",
+    "web_scan_status",
+    "web_vulnerability_scanner",
+    "Host",
+    "Message",
+    "StatusStatistics",
+    "StatusStatisticEntry",
+    "TargetHostInfo",
+    "TargetInfo",
+    "Vulnerability",
+    "WebScanStatus",
+    "WebVulnerabilityScanner",
 ]

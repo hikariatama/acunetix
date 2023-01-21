@@ -21,7 +21,7 @@ class Users:
         """
         return [
             User.from_dict(user)
-            for user in (await self._request("GET", "users"))["users"]
+            for user in (await self.request("GET", "users"))["users"]
         ]
 
     async def get_user(self, user: typing.Union[User, str]) -> User:
@@ -38,7 +38,7 @@ class Users:
         ```
         """
         return User.from_dict(
-            await self._request("GET", f"users/{get_input_user_id(user)}")
+            await self.request("GET", f"users/{get_input_user_id(user)}")
         )
 
     async def create_user(
@@ -69,7 +69,7 @@ class Users:
         ```
         """
         return User.from_dict(
-            await self._request(
+            await self.request(
                 "POST",
                 "users",
                 json={
@@ -100,7 +100,7 @@ class Users:
                 )
         ```
         """
-        await self._request(
+        await self.request(
             "POST",
             "users/disable",
             json={"user_id_list": [get_input_user_id(user) for user in users_list]},
@@ -124,7 +124,7 @@ class Users:
                 )
         ```
         """
-        await self._request(
+        await self.request(
             "POST",
             "users/enable",
             json={"user_id_list": [get_input_user_id(user) for user in users_list]},
@@ -148,7 +148,7 @@ class Users:
                 )
         ```
         """
-        await self._request(
+        await self.request(
             "POST",
             "users/delete",
             json={"user_id_list": [get_input_user_id(user) for user in users_list]},
@@ -227,7 +227,7 @@ class Users:
         ```
         """
 
-        await self._request(
+        await self.request(
             "PATCH",
             f"users/{get_input_user_id(user)}",
             json={
