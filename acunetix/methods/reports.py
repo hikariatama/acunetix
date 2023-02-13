@@ -216,10 +216,13 @@ class Reports:
             report_url = f"https://{self._endpoint}{uri}"
             with tempfile.TemporaryDirectory() as tmpdir:
                 file = os.path.join(tmpdir, "report")
+                filename: str = None
 
                 def download_file():
+                    nonlocal filename
                     with requests.get(report_url, stream=True, verify=False) as r:
                         r.raise_for_status()
+                        filename = r.headers.get("Content-Disposition").split("=")[1]
                         with open(file, "wb") as f:
                             for chunk in r.iter_content(chunk_size=8192):
                                 f.write(chunk)
@@ -229,14 +232,7 @@ class Reports:
                 async with aopen(file, "rb") as f:
                     file: io.BytesIO = io.BytesIO(await f.read())
 
-                file.name = await run_sync(
-                    lambda _report_url=report_url: (
-                        # skipcq: BAN-B310
-                        request.urlopen(request.Request(_report_url))
-                        .info()
-                        .get_filename()
-                    )
-                )
+                file.name = filename
                 file.seek(0)
                 files.append(file)
 
