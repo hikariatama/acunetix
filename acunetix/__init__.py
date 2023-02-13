@@ -6,7 +6,8 @@ import logging
 import string
 import typing
 
-import aiohttp
+import requests
+import urllib3
 
 from . import errors, methods, schema, status_codes, typehints, utils
 from .errors import (
@@ -63,6 +64,7 @@ from .schema import (
     Report,
     ReportTemplate,
     Scan,
+    ScanSpeed,
     StatusStatisticEntry,
     StatusStatistics,
     Target,
@@ -73,7 +75,6 @@ from .schema import (
     Vulnerability,
     WebScanStatus,
     WebVulnerabilityScanner,
-    ScanSpeed,
 )
 from .status_codes import EXPORT_DONE_STATUS, REPORT_DONE_STATUS, SCAN_DONE_STATUS
 from .typehints import (
@@ -169,19 +170,16 @@ __all__ = [
 ]
 
 logger = logging.getLogger(__name__)
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-# pylint: disable=unused-argument
-def _default(self, obj):  # skipcq: PYL-W0613
-    """
-    Patch default JSON serializer to support custom classes
-    It will call `to_json` method on the object if it exists
-    """
-    return getattr(obj.__class__, "to_json", _default.default)(obj)
-
-
-_default.default = json.JSONEncoder().default
-json.JSONEncoder.default = _default
+class CustomJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        return (
+            obj.to_json()
+            if hasattr(obj, "to_json")
+            else json.JSONEncoder.default(self, obj)
+        )
 
 
 class AcunetixAPI(Scans, Targets, Reports, Users):
@@ -292,7 +290,7 @@ class AcunetixAPI(Scans, Targets, Reports, Users):
         path: str,
         data: dict = None,
         full_response: bool = False,
-    ) -> typing.Union[dict, aiohttp.ClientResponse]:
+    ) -> typing.Union[dict, requests.Response]:
         """
         Makes a request to the Acunetix API
         :param method: HTTP method
@@ -302,24 +300,25 @@ class AcunetixAPI(Scans, Targets, Reports, Users):
         :return: JSON response or full response object
         """
         logger.debug("Requesting %s %s", method, path)
-        async with aiohttp.ClientSession() as session:
-            async with session.request(
+        response: requests.Response = await utils.run_sync(
+            lambda: requests.request(
                 method,
                 f"https://{self._endpoint}/api/v1/{path}",
-                json=data,
-                headers={"X-Auth": self._api_key},
-                ssl=False,
-            ) as response:
-                if response.status == 204:
-                    return {}
+                data=json.dumps(data, cls=CustomJSONEncoder),
+                headers={"X-Auth": self._api_key, "Content-Type": "application/json"},
+                verify=False,
+            )
+        )
+        if response.status_code == 204:
+            return {}
 
-                if response.status not in range(200, 300):
-                    raise ERROR_MAP.get(response.status, AcunetixAPIError)(
-                        response.status,
-                        await response.text(),
-                    )
+        if response.status_code not in range(200, 300):
+            raise ERROR_MAP.get(response.status_code, AcunetixAPIError)(
+                response.status_code,
+                response.text,
+            )
 
-                return response if full_response else await response.json()
+        return response if full_response else response.json()
 
     async def _check_credentials(self):
         """Checks if the credentials are valid"""

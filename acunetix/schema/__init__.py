@@ -11,6 +11,7 @@ from . import (
     report_template,
     scan,
     scan_profile,
+    scan_speed,
     scheduling_options,
     status_statistic_entry,
     status_statistics,
@@ -22,7 +23,6 @@ from . import (
     vulnerability,
     web_scan_status,
     web_vulnerability_scanner,
-    scan_speed,
 )
 from .access_map import AccessMap
 from .current_session import CurrentSession
@@ -67,6 +67,7 @@ from .scan_profile import (
     XSS_VULNERABILITIES,
     ScanProfile,
 )
+from .scan_speed import ScanSpeed
 from .scheduling_options import SchedulingOptions
 from .status_statistic_entry import StatusStatisticEntry
 from .status_statistics import StatusStatistics
@@ -78,7 +79,6 @@ from .user import User
 from .vulnerability import Vulnerability
 from .web_scan_status import WebScanStatus
 from .web_vulnerability_scanner import WebVulnerabilityScanner
-from .scan_speed import ScanSpeed
 
 __all__ = [
     "CurrentSession",

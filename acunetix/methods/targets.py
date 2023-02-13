@@ -1,8 +1,8 @@
 import typing
 
-from ..schema import InputTarget, Target, ScanSpeed
-from ..utils import get_input_target_id
+from ..schema import InputTarget, Target
 from ..typehints import InputTargetType
+from ..utils import get_input_target_id
 
 
 class Targets:
