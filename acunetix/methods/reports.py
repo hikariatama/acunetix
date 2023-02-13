@@ -4,8 +4,8 @@ import tempfile
 import typing
 from urllib import request
 
-import aiohttp
 from aiofiles import open as aopen
+import requests
 
 from ..errors import Acunetix404Error
 from ..schema import Report, ReportTemplate, Scan, Target, TypedList
@@ -189,7 +189,9 @@ class Reports:
         await self.delete_reports([report])
 
     async def download_report(
-        self, report: InputReport, download: str = "both"
+        self,
+        report: InputReport,
+        download: str = "both",
     ) -> typing.List[io.BytesIO]:
         """
         Download report
@@ -214,11 +216,15 @@ class Reports:
             report_url = f"https://{self._endpoint}{uri}"
             with tempfile.TemporaryDirectory() as tmpdir:
                 file = os.path.join(tmpdir, "report")
-                async with aopen(file, "wb") as f:
-                    async with aiohttp.ClientSession() as session:
-                        async with session.get(report_url) as resp:
-                            async for chunk in resp.content.iter_chunked(10):
-                                await f.write(chunk)
+
+                def download_file():
+                    with requests.get(report_url, stream=True, verify=False) as r:
+                        r.raise_for_status()
+                        with open(file, "wb") as f:
+                            for chunk in r.iter_content(chunk_size=8192):
+                                f.write(chunk)
+
+                await run_sync(download_file)
 
                 async with aopen(file, "rb") as f:
                     file: io.BytesIO = io.BytesIO(await f.read())

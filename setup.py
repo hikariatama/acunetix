@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="acunetix",
-    version="0.0.5",
+    version="0.0.6",
     packages=find_packages(),
     long_description="Acunetix Web Vulnerability Scanner API wrapper",
     keywords="acunetix vulnerability scanner pentest security infosec",
